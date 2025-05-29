@@ -24,6 +24,12 @@ AI-powered web app to generate and save recipes based on user prompts. Built wit
 
 ---
 
+## Important Note
+
+If you don't see the images, the problem is with the Unsplash API returning a `500 Internal Server Error`. This can happen occasionally when requesting random images using `https://source.unsplash.com`. The image URL still works as a placeholder, but the service might temporarily fail to return a photo.
+
+---
+
 ## 🛠️ Setup Instructions
 
 ### 1. Clone the repo
@@ -82,7 +88,3 @@ npm run dev
 ```
 
 Open http://localhost:3000 to view the app.
-
-## Note
-
-If you don't see the images, the problem is with the Unsplash API returning a `500 Internal Server Error`. This can happen occasionally when requesting random images using `https://source.unsplash.com`. The image URL still works as a placeholder, but the service might temporarily fail to return a photo.
