@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🍽️ AI Recipe Finder
+AI-powered web app to generate and save recipes based on user prompts. Built with Next.js 14, Tailwind CSS, ShadCN UI, Prisma, SQLite, React Query, and OpenAI.
 
-## Getting Started
+🚀 Features
 
-First, run the development server:
+🔍 Search recipes with AI (OpenAI GPT-4 Turbo)
+❤️ Favorite your recipes
+📋 View full ingredients and instructions
+⚡ Optimistic UI with React Query
+🎨 UI built with ShadCN and Tailwind
 
-```bash
-npm run dev
+🧱 Tech Stack
+
+Next.js App Router
+React Query (TanStack)
+Prisma ORM with SQLite
+Tailwind CSS + ShadCN UI
+OpenAI API
+
+🛠️ Setup Instructions
+
+1. Clone the repo
+   bashgit clone https://github.com/yourusername/ai-recipe-finder.git
+   cd ai-recipe-finder
+2. Install dependencies
+   bashpnpm install
+
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm install 3. Environment variables
+Create a .env file:
+envOPENAI_API_KEY=your-openai-key
+DATABASE_URL="file:./dev.db"
+📦 Prisma Setup 4. Initialize database
+bashnpx prisma generate
+npx prisma migrate dev --name init 5. Seed (optional)
+bashnpx prisma studio
+🧠 OpenAI API
+The API request is handled in:
+/src/app/api/recipes/route.ts
+Schema validation with Zod is used to ensure prompt integrity.
+You send a prompt like:
+ts{
+prompt: "chicken and rice"
+}
+And receive a response with:
+tstype Recipe = {
+id: string;
+title: string;
+duration: string;
+favorite: boolean;
+image: string;
+ingredients: string[];
+instructions: string[];
+}
+🖼️ Project Structure
+bashsrc/
+│
+├── app/ # Next.js app routes
+│ └── recipe/[id]/ # Dynamic route for recipe details
+│
+├── components/ # Reusable UI components
+│
+├── lib/
+│ ├── openai.ts # OpenAI config
+│ ├── prisma.ts # Prisma client
+│ ├── requests/ # API requests (fetch functions)
+│ ├── mutations/ # React Query mutations
+│ └── validations/ # Zod schemas
+│
+├── types/ # Shared TypeScript types
+└── styles/ # Global styles
+🐳 Optional: Docker Setup
+If you'd like to containerize the app later:
+dockerfile# Example only (not yet configured)
+FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run build
+CMD ["npm", "run", "start"]
+✅ Scripts
+bashpnpm dev # Start dev server
+pnpm build # Build for production
+pnpm start # Start production server
+pnpm lint # Run ESLint
+🙌 Credits
+Built by [your name] as part of an AI-powered project demo.
