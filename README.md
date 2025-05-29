@@ -29,7 +29,7 @@ AI-powered web app to generate and save recipes based on user prompts. Built wit
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/ai-recipe-finder.git
+git clone https://github.com/CristianCureu/ai-powered-recipe-generator.git
 cd ai-powered-recipe-generator
 ```
 
