@@ -6,7 +6,7 @@ AI-powered web app to generate and save recipes based on user prompts. Built wit
 
 ## 🚀 Features
 
-- Search recipes with AI (OpenAI GPT-4 Turbo)
+- Search recipes with AI (OpenAI GPT-3.5)
 - Favorite your recipes
 - View full ingredients and instructions
 - Optimistic UI with React Query
