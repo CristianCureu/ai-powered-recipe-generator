@@ -1,34 +1,41 @@
-import { NextResponse } from "next/server";
-import { openai } from "@/lib/openai";
 import { generateRecipeSchema } from "@/lib/validations/generate-recipe.schema";
-import { saveRecipesToDB } from "@/lib/services/recipe";
 import { recipeArraySchema } from "@/lib/validations/recipe-response.schema";
-
+import { saveRecipesToDB } from "@/lib/services/recipe";
+import { NextResponse } from "next/server";
+import { Recipes } from "@/types/recipe";
+import { openai } from "@/lib/openai";
 
 export async function POST(req: Request) {
-    const body = await req.json();
+  const body = await req.json();
 
-    const parsed = generateRecipeSchema.safeParse(body);
-    if (!parsed.success) {
-        return NextResponse.json({ error: "Invalid input" }, { status: 400 })
-    }
+  const parsed = generateRecipeSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  }
 
-    const { prompt } = parsed.data;
+  const { prompt } = parsed.data;
 
-    const chat = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-            {
-                role: "system",
-                content: "You are a JSON API. Always respond with valid, minified JSON matching the structure requested. Never include explanations."
-            },
-            {
-                role: "user",
-                content: `Generate 5 recipes based on: "${prompt}". 
+  const chat = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a JSON API. Always respond with valid, minified JSON matching the structure requested. Never include explanations.",
+      },
+      {
+        role: "user",
+        content: `Generate 5 recipes based on: "${prompt}". 
 
 Respond with JSON ONLY using the exact structure below.
 
-Use realistic *absolute image URLs* (like from unsplash.com or example.com) for the "image" field.
+Use the Lorem Picsum service to generate image URLs. For example:
+"https://picsum.photos/seed/unique-key/400/300"
+
+- Each recipe must have a unique image using a different seed (e.g. the title).
+- Don't use any external services or APIs for images—only Lorem Picsum.
+- Always ensure the image URL follows this format:
+  "https://picsum.photos/seed/RECIPE_TITLE_SLUG/400/300"
 
 Requirements:
 - "ingredients": Use bullet-style strings starting with "•", like "• 2 cups of flour".
@@ -66,30 +73,39 @@ Each instruction should:
     "Serve warm. Garnish with any toppings you like and enjoy!"
     ]
   }
-]`
-            }
-        ],
-        temperature: 0.7,
-    })
+]`,
+      },
+    ],
+    temperature: 0.7,
+  });
 
-    const message = chat.choices?.[0]?.message?.content;
+  const message = chat.choices?.[0]?.message?.content;
 
-    if (!message || typeof message !== "string") {
-        return NextResponse.json({ error: "No content returned from model" }, { status: 500 });
+  if (!message || typeof message !== "string") {
+    return NextResponse.json(
+      { error: "No content returned from model" },
+      { status: 500 },
+    );
+  }
+
+  try {
+    const recipes: Recipes = JSON.parse(message);
+
+    const parsed = recipeArraySchema.safeParse(recipes);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid recipe structure from model" },
+        { status: 500 },
+      );
     }
 
-    try {
-        const recipes: Recipes = JSON.parse(message);
-
-        const parsed = recipeArraySchema.safeParse(recipes)
-        if (!parsed.success) {
-            return NextResponse.json({ error: "Invalid recipe structure from model" }, { status: 500 });
-        }
-
-        const saved = await saveRecipesToDB(recipes);
-        return NextResponse.json(saved);
-    } catch (e) {
-        return NextResponse.json({ error: "Invalid JSON returned by model" }, { status: 500 });
-    }
+    const saved = await saveRecipesToDB(recipes);
+    return NextResponse.json(saved);
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { error: "Invalid JSON returned by model" },
+      { status: 500 },
+    );
+  }
 }
-

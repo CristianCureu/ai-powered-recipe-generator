@@ -6,6 +6,7 @@ import RecipeSkeleton from "@/components/RecipeSkeleton";
 import RecipeSection from "@/components/RecipeSection";
 import SearchInput from "@/components/SearchInput";
 import SearchForm from "@/components/SearchForm";
+import type { Recipes } from "@/types/recipe";
 import { useState } from "react";
 
 export default function Home() {
@@ -74,7 +75,8 @@ export default function Home() {
     onGenerateNew?: () => void;
   }) => {
     if (isLoading) return <RecipeSkeleton />;
-    if (isError) return <p className="mt-12">Failed to load {title.toLowerCase()}</p>;
+    if (isError)
+      return <p className="mt-12">Failed to load {title.toLowerCase()}</p>;
 
     return (
       <RecipeSection
@@ -93,7 +95,9 @@ export default function Home() {
 
   return (
     <div className="max-w-xl mx-auto">
-      {!isPendingGenerating && (
+      {isPendingGenerating ? (
+        <p>Loading...</p>
+      ) : (
         <SearchForm onSubmit={handleGenerateRecipe}>
           <SearchInput
             value={searchValue}

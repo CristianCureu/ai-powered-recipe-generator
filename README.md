@@ -64,7 +64,8 @@ npx prisma db push
 >
 > ```bash
 > npx prisma migrate dev
-> 
+>
+> ```
 
 ### 5. (Optional) Start Prisma Studio
 

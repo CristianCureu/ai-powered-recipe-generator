@@ -1,26 +1,23 @@
 "use client";
 
 import RecipeSkeleton from "@/components/RecipeSkeleton";
-import ToggleLike from "@/components/ToggleFavorite";
+import FallbackImage from "@/components/FallbackImage";
 import { getRecipeById } from "@/lib/requests/recipe";
+import ToggleLike from "@/components/ToggleFavorite";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import type { Recipe } from "@/types/recipe";
 import { useParams } from "next/navigation";
 
 export default function RecipePage() {
   const { id } = useParams();
   const recipeId = Number(id);
 
-  const {
-    data: recipe,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["recipe", recipeId],
     queryFn: () => getRecipeById(recipeId),
   });
 
-  console.log(recipe);
+  const recipe: Recipe = data || null;
 
   if (isLoading) return <RecipeSkeleton />;
   if (isError) return <p>Error while fetching recipe.</p>;
@@ -29,9 +26,9 @@ export default function RecipePage() {
     <div className="flex min-h-full">
       {/* Left */}
       <div className="flex-1 px-4 lg:px-10">
-        <Image
-          src={"/placeholder.png"}
-          alt={"recipe"}
+        <FallbackImage
+          src={recipe?.image || ""}
+          alt={recipe?.title || "recipe"}
           width={100}
           height={100}
           className="object-contain w-full bg-gray-200"
@@ -42,7 +39,9 @@ export default function RecipePage() {
             <h2 className="text-xl font-bold">{recipe?.title}</h2>
             <p>{recipe?.duration}</p>
           </div>
-          <div className="self-center lg:self-start">{recipe && <ToggleLike recipe={recipe} />}</div>
+          <div className="self-center lg:self-start">
+            {recipe && <ToggleLike recipe={recipe} />}
+          </div>
         </div>
       </div>
 
@@ -53,7 +52,7 @@ export default function RecipePage() {
           <ul>
             {Array.isArray(recipe?.ingredients) &&
               recipe.ingredients.map((item, index) =>
-                typeof item === "string" ? <li key={index}>{item}</li> : null
+                typeof item === "string" ? <li key={index}>{item}</li> : null,
               )}
           </ul>
         </section>
@@ -63,7 +62,7 @@ export default function RecipePage() {
           <ol className="list-decimal list-inside">
             {Array.isArray(recipe?.instructions) &&
               recipe.instructions.map((item, index) =>
-                typeof item === "string" ? <li key={index}>{item}</li> : null
+                typeof item === "string" ? <li key={index}>{item}</li> : null,
               )}
           </ol>
         </section>

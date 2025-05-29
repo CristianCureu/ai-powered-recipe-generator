@@ -1,3 +1,4 @@
+import type { Recipes } from "@/types/recipe";
 import RecipeCard from "./RecipeCard";
 
 type RecipeSectionProps = {
@@ -21,7 +22,9 @@ export default function RecipeSection({
         {recipes.length === 0 ? (
           <p>No recipes</p>
         ) : (
-          recipes.map((recipe) => <RecipeCard key={recipe.title} recipe={recipe} />)
+          recipes.map((recipe) => (
+            <RecipeCard key={recipe.title} recipe={recipe} />
+          ))
         )}
       </div>
 
@@ -31,7 +34,7 @@ export default function RecipeSection({
             className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 cursor-pointer"
             onClick={onGenerateNew}
           >
-            I don't like these
+            {`I don't like these`}
           </button>
         </div>
       )}
