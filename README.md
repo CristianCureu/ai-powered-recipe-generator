@@ -30,7 +30,7 @@ AI-powered web app to generate and save recipes based on user prompts. Built wit
 
 ```bash
 git clone https://github.com/yourusername/ai-recipe-finder.git
-cd ai-recipe-finder
+cd ai-powered-recipe-generator
 ```
 
 ### 2. Install dependencies
@@ -60,13 +60,13 @@ Push the schema to create the SQLite database (recommended if migrations are not
 npx prisma db push
 ```
 
-💡 If prisma/migrations/ exists, you can alternatively run:
+> 💡 If `prisma/migrations/` exists, you can alternatively run:
+>
+> ```bash
+> npx prisma migrate dev
+> 
 
-```bash
-npx prisma migrate dev
-```
-
-### 5. Start Prisma Studio (Optional UI for DB)
+### 5. (Optional) Start Prisma Studio
 
 Open DB in browser
 
@@ -75,5 +75,9 @@ npx prisma studio
 ```
 
 ### 6. Start the development server
+
+```bash
+npm run dev
+```
 
 Open http://localhost:3000 to view the app.
