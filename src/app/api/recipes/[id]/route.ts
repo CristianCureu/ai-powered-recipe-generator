@@ -1,11 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  _req: Request,
-  { params }: { params: { id: string } },
-) {
-  const id = Number(params.id);
+export async function GET(_req: Request, context: { params: { id: string } }) {
+  const id = Number(context.params.id);
   if (isNaN(id))
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
@@ -16,11 +13,8 @@ export async function GET(
   return NextResponse.json(recipe);
 }
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
-  const id = Number(params.id);
+export async function PATCH(req: Request, context: { params: { id: string } }) {
+  const id = Number(context.params.id);
   if (isNaN(id))
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 

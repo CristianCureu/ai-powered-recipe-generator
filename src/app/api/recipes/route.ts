@@ -29,13 +29,14 @@ export async function POST(req: Request) {
 
 Respond with JSON ONLY using the exact structure below.
 
-Use the Lorem Picsum service to generate image URLs. For example:
-"https://picsum.photos/seed/unique-key/400/300"
+Use the Unsplash Source service to generate image URLs.
 
-- Each recipe must have a unique image using a different seed (e.g. the title).
-- Don't use any external services or APIs for images—only Lorem Picsum.
-- Always ensure the image URL follows this format:
-  "https://picsum.photos/seed/RECIPE_TITLE_SLUG/400/300"
+For example:
+"https://source.unsplash.com/400x300/?food,RECIPE_TITLE_SLUG"
+
+- Replace RECIPE_TITLE_SLUG with the kebab-case version of the recipe title
+- Always include "food" in the query to ensure relevant images
+- Do not use external APIs other than Unsplash Source
 
 Requirements:
 - "ingredients": Use bullet-style strings starting with "•", like "• 2 cups of flour".
@@ -46,6 +47,8 @@ Each instruction should:
 - Be a full paragraph (not just 1 line).
 - Include helpful notes or tips inside parentheses when relevant.
 - Use a friendly, conversational tone.
+
+Duration will be in the format "min." instead of minutes
 
 [
   {

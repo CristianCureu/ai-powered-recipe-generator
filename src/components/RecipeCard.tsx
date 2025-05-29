@@ -18,15 +18,13 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
             alt={recipe.title}
             width={64}
             height={64}
-            className="object-contain w-full h-full"
+            className="object-cover w-full h-full"
           />
         </div>
 
         <div className="flex-1 px-4 h-full">
           <h3 className="font-semibold">{recipe.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {recipe.duration} min.
-          </p>
+          <p className="text-sm text-muted-foreground">{recipe.duration}</p>
         </div>
 
         <ToggleFavorite recipe={recipe} />

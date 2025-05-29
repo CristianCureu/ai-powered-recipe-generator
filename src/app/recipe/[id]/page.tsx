@@ -23,15 +23,15 @@ export default function RecipePage() {
   if (isError) return <p>Error while fetching recipe.</p>;
 
   return (
-    <div className="flex min-h-full">
+    <div className="flex min-h-full flex-col lg:flex-row">
       {/* Left */}
       <div className="flex-1 px-4 lg:px-10">
         <FallbackImage
           src={recipe?.image || ""}
           alt={recipe?.title || "recipe"}
-          width={100}
-          height={100}
-          className="object-contain w-full bg-gray-200"
+          width={200}
+          height={200}
+          className="object-contain w-full bg-gray-200 rounded-xl"
         />
 
         <div className="flex w-full justify-between mt-12">
